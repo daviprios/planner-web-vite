@@ -1,0 +1,112 @@
+.layout
+  position: relative
+
+  display: grid
+  grid-template-rows: max-content auto
+  grid-template-areas: 'header' 'content'
+
+  height: 100%
+
+  overflow: hidden
+
+.header
+  grid-area: header
+  position: relative
+
+  display: flex
+  justify-content: space-between
+
+  height: 6rem
+  width: 100%
+
+  padding: 0.25rem 2rem
+
+  color: var(--color-neutral-primary)
+  background-color: var(--color-primary)
+
+  & > div
+    display: flex
+    align-items: center
+
+.title
+  margin: 0 1.5rem
+
+.sideMenuButton
+  height: 80%
+  aspect-ratio: 1
+
+  color: var(--color-neutral-primary)
+  background-color: transparent
+  font-size: large
+
+  border: none
+  transition: 0.2s
+
+  &:hover
+    cursor: pointer
+    background-color: var(--color-low)
+    transition: 0.2s
+
+  &:focus
+    background-color: var(--color-low)
+
+  &:active
+    background-color: var(--color-high)
+
+.sideMenu
+  grid-area: content
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 1
+
+  height: 100%
+  width: max-content
+
+  padding: 2rem 2rem
+
+  background-color: var(--color-secondary)
+
+  & > button
+    height: 2rem
+    width: 100%
+    margin-bottom: 1rem
+
+    border-radius: 0.5rem
+    border: none
+
+  .navigation
+    li
+      user-select: none
+
+      a
+        display: block
+
+        margin: 1rem 0
+        padding: 1rem
+
+        height: 100%
+        width: 100%
+
+        border-radius: 0.5rem
+        text-decoration: unset
+
+        &:visited
+          color: unset
+
+  & > button, .navigation li a
+    color: var(--color-neutral-primary)
+    background-color: var(--color-terciary)
+
+    &:hover
+      cursor: pointer
+      background-color: var(--color-low)
+
+    &:focus
+      background-color: var(--color-low)
+
+    &:active
+      background-color: var(--color-high)
+
+.content
+  padding: 1rem

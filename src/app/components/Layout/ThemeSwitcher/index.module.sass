@@ -1,0 +1,53 @@
+.themeSwitch
+  appearance: none
+
+  position: relative
+  cursor: pointer
+
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+  height: 1.75rem
+  aspect-ratio: 2/1
+
+  padding: 0.25rem 0.25rem
+
+  background-color: var(--color-neutral-secondary)
+
+  border-radius: 2rem
+  border: solid 1px gray
+
+  transition: 1s
+
+  &::before
+    content: '🌞 🌛'
+
+    display: flex
+    justify-content: space-between
+
+    width: 100%
+
+    font-size: medium
+
+  &::after
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+
+    height: 100%
+    aspect-ratio: 1
+
+    background-color: white
+
+    border: solid 1px lightgray
+    border-radius: 50%
+
+    box-sizing: border-box
+
+    transition-duration: 0.5s
+
+  &:checked::after
+      transition-duration: 0.5s
+      transform: translateX(110%)
