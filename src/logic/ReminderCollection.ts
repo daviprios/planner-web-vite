@@ -1,4 +1,4 @@
-import { ReminderCollectionProprieties } from '@types/Reminder'
+import { ReminderCollectionProprieties } from '$types/Reminder'
 import PlannerCollection from './PlannerCollection'
 import ReminderEvent from './ReminderEvent'
 

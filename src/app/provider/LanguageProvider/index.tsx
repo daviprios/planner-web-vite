@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react'
-import { LanguageTemplate } from '@lang/languageTemplate'
-import pt_br from '@lang/languages/pt_br'
+import { LanguageTemplate } from '$lang/languageTemplate'
+import pt_br from '$lang/languages/pt_br'
 
 const LanguageContext = createContext<{
   language: LanguageTemplate,

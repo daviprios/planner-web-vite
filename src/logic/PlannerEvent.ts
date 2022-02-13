@@ -1,4 +1,4 @@
-import { PlannerEventProprieties } from '@types/Planner'
+import { PlannerEventProprieties } from '$types/Planner'
 
 abstract class PlannerEvent<Proprieties extends PlannerEventProprieties>{
   constructor(

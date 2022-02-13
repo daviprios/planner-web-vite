@@ -1,6 +1,6 @@
-import '@styles/_global.sass'
+import '$styles/_global.sass'
 import { HashRouter, Routes as Switch, Route } from 'react-router-dom'
-import GlobalProviders from '@provider/GlobalProviders'
+import GlobalProviders from '$provider/GlobalProviders'
 
 import Layout from './components/Layout'
 import Agenda from './views/Agenda'

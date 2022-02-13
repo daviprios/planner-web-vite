@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { routePaths } from '@app/routes'
+import { routePaths } from '$app/routes'
 import { useContext, useEffect, useRef, useState } from 'react'
 
-import { ChangeLanguage } from '@lang/ManageLanguage'
-import { LanguageContext } from '@provider/LanguageProvider'
-import { ThemeContext } from '@provider/ThemeProvider'
-import { TitleContext } from '@provider/TitleProvider'
+import { ChangeLanguage } from '$lang/ManageLanguage'
+import { LanguageContext } from '$provider/LanguageProvider'
+import { ThemeContext } from '$provider/ThemeProvider'
+import { TitleContext } from '$provider/TitleProvider'
 
 import './index.sass'
 import styles from './index.module.sass'

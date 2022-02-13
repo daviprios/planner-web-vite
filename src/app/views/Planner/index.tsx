@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
-import { LanguageContext } from '@provider/LanguageProvider'
-import { TitleContext } from '@provider/TitleProvider'
+import { LanguageContext } from '$provider/LanguageProvider'
+import { TitleContext } from '$provider/TitleProvider'
 
 const Planner = () => {
   const { language } = useContext(LanguageContext)

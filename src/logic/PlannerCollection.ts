@@ -1,4 +1,4 @@
-import { PlannerCollectionProprieties, PlannerEventProprieties } from '@types/Planner'
+import { PlannerCollectionProprieties, PlannerEventProprieties } from '$types/Planner'
 import PlannerEvent from './PlannerEvent'
 
 abstract class PlannerCollection<PlannerCollectionItem extends PlannerEvent<PlannerEventProprieties>>{

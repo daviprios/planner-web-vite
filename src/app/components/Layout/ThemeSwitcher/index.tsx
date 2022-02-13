@@ -1,5 +1,5 @@
-import { LanguageContext } from '@provider/LanguageProvider'
-import { ThemeContext } from '@provider/ThemeProvider'
+import { LanguageContext } from '$provider/LanguageProvider'
+import { ThemeContext } from '$provider/ThemeProvider'
 import { useState, useEffect, useContext } from 'react'
 import styles from './index.module.sass'
 
