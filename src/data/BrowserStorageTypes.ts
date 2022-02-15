@@ -1,154 +1,91 @@
 import { DBSchema } from 'idb'
 
 type BrowserStorageKeyTypes = number | [number, number]
-type BrowserStorageNames = 'PlannerEvents' | 'EventTag' | 'PlannerEventHasEventTag' | 'ReminderEvents' |
-  'ReminderEvents' | 'FinancialEvents' | 'ListEvents' | 'ListCollections' |
-  'TrackerEvents' | 'TrackerCollections' | 'TrackerCollectionValues' | 'TrackerCollectionsHasTrackerCollectionValue'
-type BrowserStorageValueTypes = {
+type BrowserStorageNames = 'ReminderEvents' | 'FinancialEvents' | 'ListEvents' | 'ListCollections' | 'TrackerEvents' | 'TrackerCollections'
+
+interface BaseEvent {
   name: string,
   description?: string,
   eventType: string,
+  tags: string[],
   timeStart: number,
   timeEnd?: number,
   fullDay: boolean,
   createdAt: number,
   updatedAt: number,
-} | {
-  name: string,
-  createdAt: number,
-  updatedAt: number,
-} | {
-  plannerEventId: number,
-  eventTagId: number,
-} | {
+}
+
+interface ReminderEventData extends BaseEvent {
   alarmTime?: number,
   place?: string
-} | {
+}
+
+interface FinancialEventData extends BaseEvent {
   moneyAmount: number,
   from: string,
   to: string,
   reason?: string,
   type?: string      
-} | {
+}
+
+interface ListEventData extends BaseEvent {
   listCollectionId: number,
   evaluation: string
-} | {
-  name: string,
-  description?: string,
-  evaluationType: string
-} | {
+}
+
+interface TrackerEventData extends BaseEvent {
   tackerCollectionId: number,
   value: string
-} | {
-  name: string,
-  description?: string
-} | {
+}
+
+interface BaseCollection{
   name: string,
   description?: string,
-  color: string,
-  symbol?: string
-} | {
-  trackerCollectionId: number,
-  trackerCollectionValueId: number
 }
- 
+
+interface ListCollection extends BaseCollection {
+  evaluationType: string
+}
+
+interface TrackerCollection extends BaseCollection {
+  values: {
+    name: string,
+    description?: string,
+    color: string,
+    symbol?: string 
+  }[]
+}
+
 interface BrowserStorageTypes extends DBSchema{
-  PlannerEvents: {
-    key: number,
-    value: {
-      name: string,
-      description?: string,
-      eventType: string,
-      timeStart: number,
-      timeEnd?: number,
-      fullDay: boolean,
-
-      createdAt: number,
-      updatedAt: number,
-    }
-  },
-  EventTag: {
-    key: number,
-    value: {
-      name: string,
-
-      createdAt: number,
-      updatedAt: number,
-    }
-  },
-  PlannerEventHasEventTag: {
-    key: number,
-    value: {
-      plannerEventId: number,
-      eventTagId: number,
-    }
-  },
   ReminderEvents: {
     //id, planner equivalent id
     key: [number, number],
-    value: {
-      alarmTime?: number,
-      place?: string
-    }
+    value: ReminderEventData
   }
   FinancialEvents: {
     //id, planner equivalent id
     key: [number, number],
-    value: {
-      moneyAmount: number,
-      from: string,
-      to: string,
-      reason?: string,
-      type?: string      
-    }
+    value: FinancialEventData
   },
   ListEvents: {
     //id, planner equivalent id
     key: [number, number],
-    value: {
-      listCollectionId: number,
-      evaluation: string
-    }
+    value: ListEventData
   },
   ListCollections: {
     key: number,
-    value: {
-      name: string,
-      description?: string,
-      evaluationType: string
-    }
+    value: ListCollection
   },
   TrackerEvents: {
     //id, planner equivalent id
     key: [number, number],
-    value: {
-      tackerCollectionId: number,
-      value: string
-    }
+    value: TrackerEventData
   },
   TrackerCollections: {
     key: number,
-    value: {
-      name: string,
-      description?: string
-    }
-  },
-  TrackerCollectionValues: {
-    key: number,
-    value: {
-      name: string,
-      description?: string,
-      color: string,
-      symbol?: string
-    }
-  },
-  TrackerCollectionsHasTrackerCollectionValue: {
-    key: number,
-    value: {
-      trackerCollectionId: number,
-      trackerCollectionValueId: number
-    }
+    value: TrackerCollection
   }
 }
 
-export type { BrowserStorageTypes, BrowserStorageKeyTypes, BrowserStorageValueTypes, BrowserStorageNames }
+export type { BrowserStorageTypes, BrowserStorageKeyTypes, BrowserStorageNames,
+  BaseEvent, BaseCollection, ReminderEventData, FinancialEventData, ListEventData, ListCollection, TrackerEventData, TrackerCollection }

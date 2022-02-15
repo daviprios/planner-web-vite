@@ -1,5 +1,5 @@
 import { openDB, IDBPDatabase, IDBPTransaction, deleteDB } from 'idb'
-import { BrowserStorageKeyTypes, BrowserStorageTypes, BrowserStorageValueTypes, BrowserStorageNames } from './BrowserStorageTypes'
+import { BrowserStorageKeyTypes, BrowserStorageTypes, BrowserStorageNames, BaseEvent, BaseCollection } from './BrowserStorageTypes'
 
 const databaseName = 'planner_storage'
 const version = 1
@@ -19,17 +19,12 @@ class BrowserStorage{
   connection: IDBPDatabase<BrowserStorageTypes> | undefined
   databaseStatus: databaseStatus = 'Unitialized'
   private collectionList: {[key in BrowserStorageNames]: BrowserStorageNames} = {
-    PlannerEventHasEventTag: 'PlannerEventHasEventTag',
-    PlannerEvents: 'PlannerEvents',
-    EventTag: 'EventTag',
     ReminderEvents: 'ReminderEvents',
     FinancialEvents: 'FinancialEvents',
     ListCollections: 'ListCollections',
     ListEvents: 'ListEvents',
     TrackerEvents: 'TrackerEvents',
-    TrackerCollectionValues: 'TrackerCollectionValues',
     TrackerCollections: 'TrackerCollections',
-    TrackerCollectionsHasTrackerCollectionValue: 'TrackerCollectionsHasTrackerCollectionValue',
   }
 
   private async connectDatabase () {
@@ -40,18 +35,15 @@ class BrowserStorage{
           oldVersion: number,
           newVersion: number,
           transaction: IDBPTransaction<BrowserStorageTypes,
-            ArrayLike<'PlannerEvents' | 'EventTag' | 'PlannerEventHasEventTag' |
-            'ReminderEvents' | 'FinancialEvents' | 'ListEvents' | 'ListCollections' |
-            'TrackerEvents' | 'TrackerCollections' | 'TrackerCollectionValues' |
-            'TrackerCollectionsHasTrackerCollectionValue'>, 'versionchange'>
+            ArrayLike<'ReminderEvents' | 'FinancialEvents' | 'ListEvents' |
+              'ListCollections' | 'TrackerEvents' | 'TrackerCollections'>,
+            'versionchange'>
           ) => {
-          console.log(newVersion)
-          console.log(transaction)
           switch(oldVersion){
             // Base Initialization
             case undefined:
             case 0:
-              this.createCollection(database, this.collectionList.EventTag)
+              this.createCollection(database, this.collectionList.ReminderEvents)
             default:
               break
           }
@@ -67,7 +59,7 @@ class BrowserStorage{
         }
       })
       this.databaseStatus = 'Connected'
-      this.connection.transaction('EventTag')
+      this.connection.transaction('ReminderEvents', 'readwrite')
     }
     catch(error) {
       this.databaseStatus = 'Error'
@@ -104,9 +96,9 @@ class BrowserStorage{
     return true
   }
 
-  public async create (
-    table: BrowserStorageNames,
-    data: BrowserStorageValueTypes
+  public async create <Table extends BrowserStorageNames, Data extends BrowserStorageTypes[Table]['value']>(
+    table: Table,
+    data: Data
   ): Promise<boolean> {
 
     if(this.connection === undefined ||
@@ -119,20 +111,24 @@ class BrowserStorage{
     return true
   }
 
-  public async read (
-    table: BrowserStorageNames,
+  public async read <Table extends BrowserStorageNames>(
+    table: Table,
     search: IDBKeyRange | BrowserStorageKeyTypes | undefined,
     searchType: SearchType
-  ): Promise<BrowserStorageValueTypes[] | BrowserStorageKeyTypes[] | [BrowserStorageKeyTypes | BrowserStorageValueTypes | undefined]> {
+  ): Promise<BrowserStorageKeyTypes[] |
+    [BrowserStorageKeyTypes | undefined] |
+    BrowserStorageTypes[Table]['value'][] |
+    [BrowserStorageTypes[Table]['value'] | undefined]> {
 
     if(this.connection === undefined ||
       this.databaseStatus !== 'Connected')
       return []
 
     let readResult:
-      BrowserStorageValueTypes[] |
       BrowserStorageKeyTypes[] |
-      [BrowserStorageKeyTypes | BrowserStorageValueTypes | undefined]
+      [BrowserStorageKeyTypes | undefined] |
+      BrowserStorageTypes[Table]['value'][] |
+      [BrowserStorageTypes[Table]['value'] | undefined]
       = []
       
     try{
@@ -155,9 +151,9 @@ class BrowserStorage{
     return readResult
   }
 
-  public async update (
-    table: BrowserStorageNames,
-    data: BrowserStorageValueTypes,
+  public async update <Table extends BrowserStorageNames, Data extends BaseEvent>(
+    table: Table,
+    data: Data,
     search: IDBKeyRange | BrowserStorageKeyTypes
   ): Promise<boolean> {
 
@@ -175,8 +171,8 @@ class BrowserStorage{
     return true
   }
   
-  public async delete (
-    table: BrowserStorageNames,
+  public async delete <Table extends BrowserStorageNames>(
+    table: Table,
     search: IDBKeyRange | BrowserStorageKeyTypes
   ): Promise<boolean> {
 
