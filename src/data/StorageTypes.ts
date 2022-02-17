@@ -1,8 +1,5 @@
 import { DBSchema } from 'idb'
 
-type BrowserStorageKeyTypes = number | [number, number]
-type BrowserStorageNames = 'ReminderEvents' | 'FinancialEvents' | 'ListEvents' | 'ListCollections' | 'TrackerEvents' | 'TrackerCollections'
-
 interface BaseEvent {
   name: string,
   description?: string,
@@ -55,7 +52,7 @@ interface TrackerCollection extends BaseCollection {
   }[]
 }
 
-interface BrowserStorageTypes extends DBSchema{
+interface StorageTypes extends DBSchema{
   ReminderEvents: {
     //id, planner equivalent id
     key: [number, number],
@@ -86,5 +83,4 @@ interface BrowserStorageTypes extends DBSchema{
   }
 }
 
-export type { BrowserStorageTypes, BrowserStorageKeyTypes, BrowserStorageNames,
-  BaseEvent, BaseCollection, ReminderEventData, FinancialEventData, ListEventData, ListCollection, TrackerEventData, TrackerCollection }
+export type { StorageTypes, BaseEvent, BaseCollection, ReminderEventData, FinancialEventData, ListEventData, ListCollection, TrackerEventData, TrackerCollection }

@@ -1,6 +1,6 @@
 import { DBSchema, IDBPDatabase, StoreKey, StoreNames, StoreValue } from 'idb'
 
-class IDBCRUD{
+class DatabaseCRUD{
   static async create <DatabaseSchema extends DBSchema, Data extends StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>>(
     database: IDBPDatabase<DatabaseSchema>,
     tableName: StoreNames<DatabaseSchema>,
@@ -98,4 +98,4 @@ class IDBCRUD{
   }
 }
 
-export default IDBCRUD
+export default DatabaseCRUD
