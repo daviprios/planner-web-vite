@@ -1,5 +1,11 @@
 import { DBSchema, IDBPDatabase, StoreKey, StoreNames, StoreValue } from 'idb'
 
+interface SearchType {
+  get: 'ALL' | 'FIRST',
+  return: 'VALUE' | 'KEY',
+  maxReturn?: number
+}
+
 class DatabaseCRUD{
   static async create <DatabaseSchema extends DBSchema, Data extends StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>>(
     database: IDBPDatabase<DatabaseSchema>,
@@ -22,7 +28,7 @@ class DatabaseCRUD{
   static async read <DatabaseSchema extends DBSchema>(
     database: IDBPDatabase<DatabaseSchema>,
     tableName: StoreNames<DatabaseSchema>,
-    searchType: { get: 'ALL' | 'FIRST', return: 'VALUE' | 'KEY', maxReturn?: number },
+    searchType: SearchType,
     search?: IDBKeyRange | StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
   ): Promise<StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
     StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
@@ -54,10 +60,10 @@ class DatabaseCRUD{
     }
   }
 
-  static async update<DatabaseSchema extends DBSchema> (
+  static async update<DatabaseSchema extends DBSchema, Data extends StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>> (
     database: IDBPDatabase<DatabaseSchema>,
     tableName: StoreNames<DatabaseSchema>,
-    data: StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>,
+    data: Data,
     search: IDBKeyRange | StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
   ): Promise<boolean> {
     try{
@@ -98,4 +104,5 @@ class DatabaseCRUD{
   }
 }
 
+export type { SearchType }
 export default DatabaseCRUD

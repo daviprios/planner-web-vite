@@ -1,37 +1,19 @@
-/**
-
-  const { database, reconnect } = useContext(DatabaseContext)
-
-  useEffect(() => {
-    reconnect()
-  }, [])
-
-  const create = () => {
-    if(database === undefined) return
-    DatabaseCRUD.create<StorageTypes, StorageTypes['ReminderEvents']['value']>(database, 'ReminderEvents',
-      { createdAt: Date.now(), fullDay: false, name: 'Evento', timeStart: new Date(2022, 1, 18, 16, 30, 0).getTime(), updatedAt: Date.now() }, 2)
-  }
-
-  const read = () => {
-    if(database === undefined) return
-    DatabaseCRUD.read<StorageTypes>(database, 'ReminderEvents', { get: 'FIRST', return: 'VALUE' }).then(res => console.log(res))
-    return 
-  }
-
-*/
-
-import { IDBPDatabase } from "idb"
-import DatabaseCRUD from "./database/DatabaseCRUD"
-import { StorageTypes } from "./StorageTypes"
+import { IDBPDatabase, StoreKey, StoreNames } from 'idb'
+import DatabaseCRUD, { SearchType } from './database/DatabaseCRUD'
+import { StorageTypes } from './StorageTypes'
 
 class StorageRequest {
-  static createReminder (database: IDBPDatabase<StorageTypes>, data: StorageTypes['ReminderEvents']['value']) {
-    DatabaseCRUD.create<StorageTypes, StorageTypes['ReminderEvents']['value']>(database, 'ReminderEvents', data)
-  }
+  static create (database: IDBPDatabase<StorageTypes>, table: StoreNames<StorageTypes>, data: StorageTypes[StoreNames<StorageTypes>]['value'])
+  { DatabaseCRUD.create<StorageTypes, StorageTypes[StoreNames<StorageTypes>]['value']>(database, table, data).then(res => console.log(res)).catch(err => console.log(err)).finally(() => console.log('create')) }
 
-  static readRemider (database: IDBPDatabase<StorageTypes>, searchType: { get: 'ALL' | 'FIRST', return: 'VALUE' | 'KEY', maxReturn?: number }) {
-    DatabaseCRUD.read<StorageTypes>(database, 'ReminderEvents', searchType).then(res => console.log(res))
-  }
+  static read (database: IDBPDatabase<StorageTypes>, table: StoreNames<StorageTypes>, searchType: SearchType, search?: IDBKeyRange | StoreKey<StorageTypes, StoreNames<StorageTypes>>)
+  { DatabaseCRUD.read<StorageTypes>(database, table, searchType, search).then(res => console.log(res)).catch(err => console.log(err)).finally(() => console.log('read')) }
+
+  static update (database: IDBPDatabase<StorageTypes>, table: StoreNames<StorageTypes>, data: StorageTypes[StoreNames<StorageTypes>]['value'], search: IDBKeyRange | StoreKey<StorageTypes, StoreNames<StorageTypes>>, )
+  { DatabaseCRUD.update<StorageTypes, StorageTypes[StoreNames<StorageTypes>]['value']>(database, table, data, search).then(res => console.log(res)).catch(err => console.log(err)).finally(() => console.log('update')) }
+
+  static delete (database: IDBPDatabase<StorageTypes>, table: StoreNames<StorageTypes>, search: IDBKeyRange | StoreKey<StorageTypes, StoreNames<StorageTypes>>)
+  { DatabaseCRUD.delete<StorageTypes>(database, table, search).then(res => console.log(res)).catch(err => console.log(err)).finally(() => console.log('delete')) }
 }
 
 export default StorageRequest
