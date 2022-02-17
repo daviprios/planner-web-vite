@@ -6,8 +6,7 @@ type BrowserStorageNames = 'ReminderEvents' | 'FinancialEvents' | 'ListEvents' |
 interface BaseEvent {
   name: string,
   description?: string,
-  eventType: string,
-  tags: string[],
+  tags?: string[],
   timeStart: number,
   timeEnd?: number,
   fullDay: boolean,
