@@ -55,17 +55,17 @@ interface TrackerCollection extends BaseCollection {
 interface StorageTypes extends DBSchema{
   ReminderEvents: {
     //id, planner equivalent id
-    key: [number, number],
+    key: number,
     value: ReminderEventData
   }
   FinancialEvents: {
     //id, planner equivalent id
-    key: [number, number],
+    key: number,
     value: FinancialEventData
   },
   ListEvents: {
     //id, planner equivalent id
-    key: [number, number],
+    key: number,
     value: ListEventData
   },
   ListCollections: {
@@ -74,7 +74,7 @@ interface StorageTypes extends DBSchema{
   },
   TrackerEvents: {
     //id, planner equivalent id
-    key: [number, number],
+    key: number,
     value: TrackerEventData
   },
   TrackerCollections: {

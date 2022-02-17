@@ -30,33 +30,30 @@ class DatabaseCRUD{
     tableName: StoreNames<DatabaseSchema>,
     searchType: SearchType,
     search?: IDBKeyRange | StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
-  ): Promise<StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
-    StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
-    [StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>> |
-      StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>> |
-      undefined]> {
-
-    let result: StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
-    StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>>[] |
-    [StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>> |
-      StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>> |
-      undefined]
-      = []
+  ): Promise<{
+      key: StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
+      value: StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>> | undefined
+    }[]> {
 
     try {
-      if(searchType.get === 'ALL' || searchType.return === 'KEY') result = await database.getAllKeys(tableName, search, searchType.maxReturn)
-      if(searchType.get === 'ALL' || searchType.return === 'VALUE') result = await database.getAll(tableName, search, searchType.maxReturn)
-      if(searchType.get === 'FIRST'){
-        if(search === undefined) return []
-        if(searchType.return === 'KEY') result = [await database.getKey(tableName, search) ?? undefined]
-        if(searchType.return === 'VALUE') result = [await database.get(tableName, search)]
+      const keys = await database.getAllKeys(tableName, search, searchType.maxReturn)
+      if(!keys) return []
+
+      let result: {
+        key: StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
+        value: StoreValue<DatabaseSchema, StoreNames<DatabaseSchema>> |
+        undefined
+      }[] = []
+
+      for(let index = 0; index < keys.length; index++){
+        const value = await database.get(tableName, keys[index])
+        result.push({ key: keys[index], value })
       }
+      return result
     }
     catch(error){
       console.log(error)
-    }
-    finally{
-      return result
+      return []
     }
   }
 
