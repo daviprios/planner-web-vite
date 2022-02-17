@@ -1,4 +1,4 @@
-import { Reducer, useReducer } from 'react'
+import { Reducer, useEffect, useReducer } from 'react'
 import styles from './index.module.sass'
 import CalendarLogic from '$logic/CalendarLogic'
 
@@ -32,11 +32,17 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
   }
 }
 
-const Calendar = () => {
+const Calendar = (props: { setDate: React.Dispatch<React.SetStateAction<number>> }) => {
+  const { setDate } = props
+
   const [state, dispatch] = useReducer<Reducer<ReducerState, ReducerAction>>(
     reducer,
     { date: Date.now(), daysInMonth: CalendarLogic.getMonthDaysAmount(Date.now()), currentDate: Date.now() }
   )
+
+  useEffect(() => {
+    setDate(state.currentDate)
+  }, [state.currentDate])
 
   const generateCalendar = (timestamp: number) => {
     let days: JSX.Element[] = []
@@ -75,28 +81,20 @@ const Calendar = () => {
   }
 
   return (
-    <article className={styles.calendar}>
-      <section className={styles.calendarContainer}>
-        <div className={styles.header}>
-          <button onClick={() => dispatch({ type: 'PREV_MONTH', payload: 0 })}>{'<'}</button>
-          <span>
-            <span>{new Date(state.date).getUTCMonth() + 1}</span>, <span>{new Date(state.date).getUTCFullYear()}</span>
-          </span>
-          <button onClick={() => dispatch({ type: 'NEXT_MONTH', payload: 0 })}>{'>'}</button>
-        </div>
-        <div>
-          <ul className={styles.calendarGrid}>
-            {generateCalendar(state.date)}
-          </ul>
-        </div>
-      </section>
-      <section className={styles.eventsContainer}>
-        <h2>Events</h2>
-        <ul>
-          {}
+    <section className={styles.calendarContainer}>
+      <div className={styles.header}>
+        <button onClick={() => dispatch({ type: 'PREV_MONTH', payload: 0 })}>{'<'}</button>
+        <span>
+          <span>{new Date(state.date).getUTCMonth() + 1}</span>, <span>{new Date(state.date).getUTCFullYear()}</span>
+        </span>
+        <button onClick={() => dispatch({ type: 'NEXT_MONTH', payload: 0 })}>{'>'}</button>
+      </div>
+      <div>
+        <ul className={styles.calendarGrid}>
+          {generateCalendar(state.date)}
         </ul>
-      </section>
-    </article>
+      </div>
+    </section>
   )
 }
 
