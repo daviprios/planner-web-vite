@@ -1,5 +1,5 @@
 import { DBSchema, IDBPDatabase, StoreNames, openDB, deleteDB,
-  DeleteDBCallbacks, OpenDBCallbacks, IDBPTransaction, IDBPObjectStore} from 'idb';
+  DeleteDBCallbacks, OpenDBCallbacks, IDBPTransaction, IDBPObjectStore, IndexNames} from 'idb';
 
 class DatabaseManager{
   static openDatabase <DatabaseSchema extends DBSchema>(
@@ -29,24 +29,20 @@ class DatabaseManager{
     deleteDB(databaseName, blocked)
   }
 
-  static createTable <DatabaseSchema extends DBSchema>(
+  static createTable <DatabaseSchema extends DBSchema, TableName extends StoreNames<DatabaseSchema>>(
     database: IDBPDatabase<DatabaseSchema>,
-    tableName: StoreNames<DatabaseSchema>,
+    tableName: TableName,
     options?: IDBObjectStoreParameters 
-  ): IDBPObjectStore<DatabaseSchema, ArrayLike<StoreNames<DatabaseSchema>>, StoreNames<DatabaseSchema>, "versionchange"> | undefined {
+  ): boolean {
     try{
-      const objectStore = database.createObjectStore(tableName, options)
-      if(objectStore !== undefined){
-        database.transaction(tableName, 'readwrite')
-        return objectStore
-      }
+      database.createObjectStore(tableName, options)
+      return true
     }
     catch(error){
       console.log(error)
-      return
     }
     finally{
-      return
+      return false
     }
   }
 

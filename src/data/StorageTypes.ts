@@ -21,7 +21,7 @@ interface FinancialEventData extends BaseEvent {
   from: string,
   to: string,
   reason?: string,
-  type?: string      
+  type?: string
 }
 
 interface ListEventData extends BaseEvent {
@@ -56,30 +56,64 @@ interface StorageTypes extends DBSchema{
   ReminderEvents: {
     //id, planner equivalent id
     key: number,
-    value: ReminderEventData
+    value: ReminderEventData,
+    indexes: {
+      name: string,
+      tags: string,
+      timeStart: number,
+      place: string
+    },
   }
   FinancialEvents: {
     //id, planner equivalent id
     key: number,
-    value: FinancialEventData
+    value: FinancialEventData,
+    indexes: {
+      name: string,
+      tags: string,
+      timeStart: number,
+      moneyAmount: number,
+      from: string,
+      to: string,
+      reason: string,
+      type: string
+    }
   },
   ListEvents: {
     //id, planner equivalent id
     key: number,
-    value: ListEventData
+    value: ListEventData,
+    indexes: {
+      name: string,
+      tags: string,
+      timeStart: number,
+      listCollectionId: number,
+    }
   },
   ListCollections: {
     key: number,
-    value: ListCollection
+    value: ListCollection,
+    indexes: {
+      name: string,
+    }
   },
   TrackerEvents: {
     //id, planner equivalent id
     key: number,
-    value: TrackerEventData
+    value: TrackerEventData,
+    indexes: {
+      name: string,
+      tags: string,
+      timeStart: number,
+      trackerCollectionId: number,
+    }
   },
   TrackerCollections: {
     key: number,
-    value: TrackerCollection
+    value: TrackerCollection,
+    indexes: {
+      name: string,
+    }
   }
 }
 

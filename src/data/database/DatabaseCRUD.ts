@@ -1,9 +1,13 @@
-import { DBSchema, IDBPDatabase, StoreKey, StoreNames, StoreValue } from 'idb'
+import { DBSchema, IDBPDatabase, IndexKey, IndexNames, StoreKey, StoreNames, StoreValue } from 'idb'
 
-interface SearchType {
+interface SearchType<DatabaseSchema, TableName extends StoreNames<DatabaseSchema>> {
   get: 'ALL' | 'FIRST',
   return: 'VALUE' | 'KEY',
-  maxReturn?: number
+  index?: {
+    table: IndexNames<DatabaseSchema, TableName>,
+    search?: IDBKeyRange | IndexKey<DatabaseSchema, TableName, IndexNames<DatabaseSchema, TableName>>
+  }
+  maxReturn?: number,
 }
 
 class DatabaseCRUD{
@@ -25,10 +29,10 @@ class DatabaseCRUD{
     }
   }
 
-  static async read <DatabaseSchema extends DBSchema>(
+  static async read <DatabaseSchema extends DBSchema, TableName extends StoreNames<DatabaseSchema>>(
     database: IDBPDatabase<DatabaseSchema>,
-    tableName: StoreNames<DatabaseSchema>,
-    searchType: SearchType,
+    tableName: TableName,
+    searchType: SearchType<DatabaseSchema, TableName>,
     search?: IDBKeyRange | StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
   ): Promise<{
       key: StoreKey<DatabaseSchema, StoreNames<DatabaseSchema>>,
@@ -36,7 +40,10 @@ class DatabaseCRUD{
     }[]> {
 
     try {
-      const keys = await database.getAllKeys(tableName, search, searchType.maxReturn)
+      const keys = searchType.index === undefined
+        ? await database.getAllKeys(tableName, search, searchType.maxReturn)
+        : await database.getAllKeysFromIndex(tableName, searchType.index.table, searchType.index.search)
+
       if(!keys) return []
 
       let result: {
@@ -72,7 +79,6 @@ class DatabaseCRUD{
     }
     catch(error){
       console.log(error)
-      return false
     }
     finally{
       return false
@@ -93,7 +99,6 @@ class DatabaseCRUD{
     }
     catch(error){
       console.log(error)
-      return false
     }
     finally{
       return false
