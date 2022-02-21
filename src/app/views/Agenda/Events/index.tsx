@@ -1,9 +1,10 @@
+import { useContext, useEffect, useRef, useState } from 'react'
+import styles from './index.module.sass'
 import { DatabaseContext } from '$app/provider/DatabaseProvider'
 import DatabaseManager from '$data/database/DatabaseManager'
 import StorageRequest from '$data/StorageRequest'
-import { useContext, useEffect, useState } from 'react'
-import styles from './index.module.sass'
 import ReminderEvent from './ReminderEventForm'
+import { useOnClickOutside } from 'usehooks-ts'
 
 const Events = (props: { date: number }) => {
   const { date } = props
@@ -41,6 +42,9 @@ const Events = (props: { date: number }) => {
 
   const [showForm, setShowForm] = useState(false)
 
+  const formRef = useRef<HTMLFormElement>(null)
+  useOnClickOutside(formRef, () => setShowForm(false))
+
   return (
     <section className={styles.eventsContainer}>
       <h2>Events</h2>
@@ -54,7 +58,10 @@ const Events = (props: { date: number }) => {
         }
         {events}
       </ul>
-      <ReminderEvent display={showForm ? '' : 'none'}/>
+      <section style={{ display: showForm ? '' : 'none' }} className={styles.formContainer}>
+        <button onClick={() => setShowForm(false)}>X</button>
+        <ReminderEvent ref={formRef} />
+      </section>
     </section>
   )
 }

@@ -1,23 +1,20 @@
-import { CSSProperties, FormEvent, HTMLAttributes } from 'react'
+import { ForwardedRef, forwardRef, HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLFormElement> {
   mode: 'ADD' | 'EDIT',
-  display: CSSProperties['display']
 }
 
-const EventForm = (props: Props) => {
-  const { children, mode, display, style, onSubmit, ...rest } = props
+const EventForm = forwardRef((props: Props, ref: ForwardedRef<HTMLFormElement> | null) => {
+  const { children, mode, onSubmit, ...rest } = props
 
   return (
-    <section style={{ display, ...style }}>
-      <form { ...rest } onSubmit={onSubmit}>
-        {children}
-        <button type='submit'>
-          {mode === 'ADD' ? 'Adicionar' : 'Editar'}
-        </button>
-      </form>
-    </section>
+    <form onSubmit={onSubmit} { ...rest } ref={ref}>
+      {children}
+      <button type='submit'>
+        {mode === 'ADD' ? 'Adicionar' : 'Editar'}
+      </button>
+    </form>
   )
-}
+})
 
 export default EventForm
