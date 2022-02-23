@@ -62,7 +62,8 @@ const reducer = (state: Data, action: Action): Data => {
 
 const timeSlot = { date: 0, hour: 1 }
 
-const ReminderEventForm = forwardRef((props: undefined | unknown, ref: ForwardedRef<HTMLFormElement> | null) => {
+const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: ForwardedRef<HTMLFormElement> | null) => {
+  const { mode } = props
   const [data, dataDispatch] = useReducer<Reducer<Data, Action>>(reducer,
     { name: '', timeStart: 0, fullDay: false, createdAt: Date.now(),
     updatedAt: Date.now(), tags: [] })
@@ -112,7 +113,7 @@ const ReminderEventForm = forwardRef((props: undefined | unknown, ref: Forwarded
   }
 
   return (
-    <EventForm className={styles.eventForm} mode='ADD' onSubmit={createEvent} ref={ref}>
+    <EventForm className={styles.eventForm} mode={mode} onSubmit={createEvent} ref={ref}>
       <label className={styles.simpleInput}>
         Name
         <input type='text' placeholder='Name' required value={data.name}

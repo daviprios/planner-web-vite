@@ -84,7 +84,7 @@ const Events = (props: { date: number }) => {
       </ul>
       <section style={{ display: showForm ? '' : 'none' }} className={styles.formContainer}>
         <button onClick={() => setShowForm(false)}>X</button>
-        <ReminderEvent ref={formRef} />
+        <ReminderEvent ref={formRef} mode={'ADD'}/>
       </section>
     </section>
   )
