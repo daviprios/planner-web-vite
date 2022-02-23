@@ -1,6 +1,10 @@
-import { Reducer, useEffect, useReducer } from 'react'
+import { Reducer, useContext, useEffect, useReducer } from 'react'
 import styles from './index.module.sass'
 import CalendarLogic from '$logic/CalendarLogic'
+
+import ArrowLeft from '$svg/arrowLeft.svg?component'
+import ArrowRight from '$svg/arrowRight.svg?component'
+import { LanguageContext } from '$app/provider/LanguageProvider'
 
 interface ReducerState {
   date: number,
@@ -34,6 +38,7 @@ const reducer = (state: ReducerState, action: ReducerAction): ReducerState => {
 
 const Calendar = (props: { setDate: React.Dispatch<React.SetStateAction<number>> }) => {
   const { setDate } = props
+  const { language } = useContext(LanguageContext)
 
   const [state, dispatch] = useReducer<Reducer<ReducerState, ReducerAction>>(
     reducer,
@@ -80,14 +85,19 @@ const Calendar = (props: { setDate: React.Dispatch<React.SetStateAction<number>>
     return days
   }
 
+  const date = new Date(state.date)
   return (
     <section className={styles.calendarContainer}>
       <div className={styles.header}>
-        <button onClick={() => dispatch({ type: 'PREV_MONTH', payload: 0 })}>{'<'}</button>
+        <button onClick={() => dispatch({ type: 'PREV_MONTH', payload: 0 })} aria-label={language.pages.agenda.calendar.aria_prevMonth}>
+          <ArrowLeft/>
+        </button>
         <span>
-          <span>{new Date(state.date).getUTCMonth() + 1}</span>, <span>{new Date(state.date).getUTCFullYear()}</span>
+          <span>{date.getMonth() + 1}</span>, <span>{date.getFullYear()}</span>
         </span>
-        <button onClick={() => dispatch({ type: 'NEXT_MONTH', payload: 0 })}>{'>'}</button>
+        <button onClick={() => dispatch({ type: 'NEXT_MONTH', payload: 0 })} aria-label={language.pages.agenda.calendar.aria_nextMonth}>
+          <ArrowRight/>
+        </button>
       </div>
       <div>
         <ul className={styles.calendarGrid}>

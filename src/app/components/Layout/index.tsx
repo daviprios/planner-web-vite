@@ -60,7 +60,7 @@ const Layout = (props: {children: JSX.Element | JSX.Element[]}) => {
       </aside>
       <div className={styles.header}>
         <div>
-          <button aria-label={language.aria.global.sideMenuButton} className={styles.sideMenuButton}
+          <button aria-label={language.global.aria_sideMenuButton} className={styles.sideMenuButton}
             onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}
             ref={openSideMenuButtonRef}>
             =

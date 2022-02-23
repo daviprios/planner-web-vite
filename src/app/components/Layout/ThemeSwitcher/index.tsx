@@ -14,7 +14,7 @@ const ThemeSwitcher = (props: { style?: React.HTMLAttributes<HTMLButtonElement> 
   }, [isDay, setTheme])
 
   return (
-    <input aria-label={language.aria.global.themeSwitcher} className={styles.themeSwitch} type='checkbox' checked={isDay} onChange={() => setIsDay(!isDay)} style={style}/>
+    <input aria-label={language.global.aria_themeSwitcher} className={styles.themeSwitch} type='checkbox' checked={isDay} onChange={() => setIsDay(!isDay)} style={style}/>
   )
 }
 

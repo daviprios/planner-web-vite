@@ -11,17 +11,36 @@
     height: 2rem
     width: 100%
 
-    background-color: lightgreen
-    border: solid 1px darkgreen
+    color: var(--color-neutral-primary)
+    background-color: var(--color-secondary)
+    border: solid 1px var(--color-alt)
+
+    span
+      font-weight: bold
 
     button
       cursor: pointer
+
+      display: flex
+      justify-content: center
+      align-items: center
 
       height: 100%
       width: 2rem
 
       border: none
+      
+      background-color: var(--color-neutral-secondary)
 
+      &:hover
+        background-color: var(--color-terciary)
+
+      svg, *
+        height: 75%
+        width: 75%
+
+        fill: var(--color-neutral-primary)
+ 
   .calendarGrid
     display: grid
     grid-template-columns: repeat(7, 1fr)
@@ -30,10 +49,10 @@
 
     margin: 1rem 0
 
-    border: solid 1px darkgreen
+    border: solid 1px var(--color-alt)
 
     .calendarCell
-      background-color: lightgreen
+      background-color: var(--color-secondary)
 
     .calendarCellButton
       user-select: none
@@ -43,13 +62,18 @@
 
       border: none
 
+      color: var(--color-neutral-primary)
+      font-weight: bold
       background-color: transparent
 
       &:hover
         cursor: pointer
-        background-color: darkgreen
+        background-color: var(--color-primary)
+
+      &:active
+        background-color: var(--color-alt)
 
       &[data-active="true"]
-        background-color: yellow
+        background-color: var(--color-terciary)
 
   

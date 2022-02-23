@@ -25,6 +25,7 @@
       "$lang/*": ["./src/app/lang/*"],
       "$views/*": ["./src/app/views/*"],
       "$components/*": ["./src/app/components/*"],
+      "$svg/*": ["./src/app/assets/svgs/*"],
     }
   },
   "include": ["src"],

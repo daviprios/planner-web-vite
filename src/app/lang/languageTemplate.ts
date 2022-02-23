@@ -1,14 +1,10 @@
 interface LanguageTemplate {
   language: string,
-  aria: {
-    global: {
-      sideMenuButton: string,
-      themeSwitcher: string
-    }
-  },
   global: {
     mainTitle: string,
-    languageOption: string
+    languageOption: string,
+    aria_sideMenuButton: string,
+    aria_themeSwitcher: string
   },
   pages: {
     home: {
@@ -16,6 +12,13 @@ interface LanguageTemplate {
     },
     agenda: {
       name: string
+      calendar: {
+        aria_prevMonth: string
+        aria_nextMonth: string
+      }
+      events: {
+
+      }
     }
   }
 }
