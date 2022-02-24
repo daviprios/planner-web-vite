@@ -22,7 +22,22 @@ const pt_br: LanguageTemplate = {
         addEvent: 'Adicionar Evento',
         title: 'Eventos',
         form: {
-          aria_closeButton: 'fechar menu de adição de evento'
+          aria_closeButton: 'fechar menu de adição de evento',
+          name: 'Nome',
+          description: 'Descrição',
+          tags: 'Etiquetas',
+          tag: 'Etiqueta',
+          newTag: 'Nova Etiqueta',
+          addTag: 'Adicionar Etiqueta',
+          aria_removeTag: 'remover etiqueta',
+          fullDay: 'Todo o dia',
+          timeStart: 'Começa',
+          timeEnd: 'Termina',
+          dateTime: 'Data',
+          hourTime: 'Hora',
+          place: 'Lugar',
+          addEvent: 'Adicionar Evento',
+          editEvent: 'Editar Evento'
         }
       }
     }

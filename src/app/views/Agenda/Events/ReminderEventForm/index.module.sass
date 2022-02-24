@@ -9,12 +9,19 @@
 
   padding: 1rem
 
-  background-color: lightblue
+  color: var(--color-neutral-primary)
+  font-weight: bold
+  background-color: var(--color-primary)
 
   & > *
     width: 90%
 
     margin-bottom: 1rem
+
+    & input,
+    & textarea
+      margin-top: 0.5rem
+      padding: 0.5em
 
   .description
     textarea
@@ -56,12 +63,22 @@
       &:not(:first-of-type)
         margin-left: 0.5rem
 
-      button
-        margin-left: 0.5rem
-        
-        height: 1.5em
-        width: 1.5em
+    button
+      margin-left: 0.5rem
+      padding: 0.5rem
 
   .fullday
     input
       margin-left: 0.5rem
+
+  & > button
+    cursor: pointer
+
+    width: 50%
+    min-width: 250px
+
+    padding: 0.5rem
+
+    color: var(--color-neutral-primary)
+    font-weight: bold
+    background-color: var(--color-confirm)

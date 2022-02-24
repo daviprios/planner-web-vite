@@ -1,8 +1,9 @@
-import EventForm from '$components/EventForm'
 import { Dispatch, FormEvent, ForwardedRef, forwardRef, Reducer, SetStateAction, useContext, useEffect, useReducer, useState } from 'react'
+import styles from './index.module.sass'
+import EventForm from '$components/EventForm'
 import StorageRequest from '$data/StorageRequest'
 import { DatabaseContext } from '$app/provider/DatabaseProvider'
-import styles from './index.module.sass'
+import { LanguageContext } from '$app/provider/LanguageProvider'
 
 interface Data {
   name: string,
@@ -61,15 +62,24 @@ const reducer = (state: Data, action: Action): Data => {
 }
 
 const timeSlot = { date: 0, hour: 1 }
+const dateTimeToInputTime = (timestamp: number = Date.now()): [string, string] => {
+  const date = new Date(timestamp)
+  const [year, month, day, hour, minute] =
+    [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes()]
 
+  const inputDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  const inputHour = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+
+  return [inputDate, inputHour]
+}
 const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: ForwardedRef<HTMLFormElement> | null) => {
   const { mode } = props
   const [data, dataDispatch] = useReducer<Reducer<Data, Action>>(reducer,
     { name: '', timeStart: 0, fullDay: false, createdAt: Date.now(),
     updatedAt: Date.now(), tags: [] })
 
-  const [timeStart, setTimeStart] = useState<[string, string]>(['2000-12-01', '12:00'])
-  const [timeEnd, setTimeEnd] = useState<[string, string]>(['2000-12-01', '12:00'])
+  const [timeStart, setTimeStart] = useState<[string, string]>(dateTimeToInputTime())
+  const [timeEnd, setTimeEnd] = useState<[string, string]>(dateTimeToInputTime())
 
   const setTime = (timeStore: [string, string], setTimeStore: Dispatch<SetStateAction<[string, string]>>, state: Action['type'], timeType: 'DATE' | 'HOUR', value: string) => {
     const time: [string, string] = [...timeStore]
@@ -112,58 +122,60 @@ const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: Forw
     event.currentTarget.reset()
   }
 
+  const { language } = useContext(LanguageContext)
+
   return (
     <EventForm className={styles.eventForm} mode={mode} onSubmit={createEvent} ref={ref}>
       <label className={styles.simpleInput}>
-        Name
-        <input type='text' placeholder='Name' required value={data.name}
+        {language.pages.agenda.events.form.name}
+        <input type='text' placeholder={language.pages.agenda.events.form.name} required value={data.name}
           onChange={(event) => dataDispatch({ type: 'SET_NAME', payload: { string: event.currentTarget.value } })}/>
       </label>
       <hr/>
       <label className={styles.description}>
-        Description
-        <textarea placeholder='Description' value={data.description}
+        {language.pages.agenda.events.form.description}
+        <textarea placeholder={language.pages.agenda.events.form.description} value={data.description}
           onChange={(event) => dataDispatch({ type: 'SET_DESCRIPTION', payload: { string: event.currentTarget.value } })}/>
       </label>
       <hr/>
       <section className={styles.tags}>
-        <p>Tags</p>
+        <p>{language.pages.agenda.events.form.tags}</p>
         <label>
-          New Tag
-          <input type='text' placeholder='Tag' value={currentTag}
+          {language.pages.agenda.events.form.newTag}
+          <input type='text' placeholder={language.pages.agenda.events.form.tag} value={currentTag}
             onChange={(event) => setCurrentTag(event.currentTarget.value)}/>
         </label>
         <button type='button' onClick={() => {
           if(data.tags?.includes(currentTag)) return
           dataDispatch({ type: 'ADD_TAG', payload: { string: currentTag } })
           setCurrentTag('')
-        }}>Add Tag</button>
+        }}>{language.pages.agenda.events.form.addTag}</button>
         <br/>
         {data.tags?.map((tag) => {
           return (
             <span key={tag} aria-label={`tag item ${tag}`}>{tag}
-              <button type='button' onClick={() => dataDispatch({ type: 'REMOVE_TAG', payload: { string: tag } })}>X</button>
+              <button type='button' onClick={() => dataDispatch({ type: 'REMOVE_TAG', payload: { string: tag } })} aria-label={`${language.pages.agenda.events.form.aria_removeTag} ${tag}`}>X</button>
             </span>
           )
         })}
       </section>
       <hr/>
       <label className={styles.fullday}>
-        Full Day
+        {language.pages.agenda.events.form.fullDay}
         <input type='checkbox' placeholder='Full Day' checked={data.fullDay}
           onChange={(event) => dataDispatch({ type: 'SET_FULL_DAY', payload: { boolean: event.currentTarget.checked } })}/>
       </label>
       <hr/>
       <section className={styles.timeSection}>
-        <p>Time Start</p>
+        <p>{language.pages.agenda.events.form.timeStart}</p>
         <div>
           <label aria-label='time start date'>
-            Date
+            {language.pages.agenda.events.form.dateTime}
             <input type='date' required value={timeStart[timeSlot.date]}
               onChange={(event) => setTime(timeStart, setTimeStart, 'SET_TIME_START', 'DATE', event.currentTarget.value)}/>
           </label>
           <label aria-label='time start time'>
-            Time
+            {language.pages.agenda.events.form.hourTime}
             <input type='time' required value={timeStart[timeSlot.hour]}
               onChange={(event) => setTime(timeStart, setTimeStart, 'SET_TIME_START', 'HOUR', event.currentTarget.value)}/>
           </label>
@@ -171,15 +183,15 @@ const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: Forw
       </section>
       <hr/>
       <section className={styles.timeSection}>
-        <p>Time End</p>
+        <p>{language.pages.agenda.events.form.timeEnd}</p>
         <div>
           <label>
-            Date
+            {language.pages.agenda.events.form.dateTime}
             <input type='date' value={timeEnd[timeSlot.date]}
               onChange={(event) => setTime(timeEnd, setTimeEnd, 'SET_TIME_END', 'DATE', event.currentTarget.value)}/>
           </label>
           <label>
-            Time
+            {language.pages.agenda.events.form.hourTime}
             <input type='time' value={timeEnd[timeSlot.hour]}
               onChange={(event) => setTime(timeEnd, setTimeEnd, 'SET_TIME_END', 'HOUR', event.currentTarget.value)}/>
           </label>
@@ -187,8 +199,8 @@ const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: Forw
       </section>
       <hr/>
       <label className={styles.simpleInput}>
-        Place
-        <input type='text' placeholder='Place' value={data.place}
+        {language.pages.agenda.events.form.place}
+        <input type='text' placeholder={language.pages.agenda.events.form.place} value={data.place}
           onChange={(event) => dataDispatch({ type: 'SET_PLACE', payload: { string: event.currentTarget.value } })}/>
       </label>
       <hr/>

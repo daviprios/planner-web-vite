@@ -22,7 +22,22 @@ const en: LanguageTemplate = {
         addEvent: 'Add Event',
         title: 'Events',
         form: {
-          aria_closeButton: 'close add event menu'
+          aria_closeButton: 'close add event menu',
+          name: 'Name',
+          description: 'Description',
+          tags: 'Tags',
+          tag: 'Tag',
+          newTag: 'New Tag',
+          addTag: 'Add Tag',
+          aria_removeTag: 'remove tag',
+          fullDay: 'Full Day',
+          timeStart: 'Start At',
+          timeEnd: 'End At',
+          dateTime: 'Date',
+          hourTime: 'Hour',
+          place: 'Place',
+          addEvent: 'Add Event',
+          editEvent: 'Edit Event'
         }
       }
     }

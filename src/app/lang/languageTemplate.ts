@@ -21,6 +21,21 @@ interface LanguageTemplate {
         addEvent: string,
         form: {
           aria_closeButton: string,
+          name: string,
+          description: string,
+          tags: string,
+          tag: string,
+          newTag: string,
+          addTag: string,
+          aria_removeTag: string,
+          fullDay: string,
+          timeStart: string,
+          timeEnd: string,
+          dateTime: string,
+          hourTime: string,
+          place: string,
+          addEvent: string,
+          editEvent: string,
         }
       }
     }
