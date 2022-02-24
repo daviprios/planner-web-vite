@@ -72,7 +72,7 @@ const dateTimeToInputTime = (timestamp: number = Date.now()): [string, string] =
 
   return [inputDate, inputHour]
 }
-const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: ForwardedRef<HTMLFormElement> | null) => {
+const ReminderEventForm = (props: { mode: 'ADD' | 'EDIT' }) => {
   const { mode } = props
   const [data, dataDispatch] = useReducer<Reducer<Data, Action>>(reducer,
     { name: '', timeStart: 0, fullDay: false, createdAt: Date.now(),
@@ -125,7 +125,7 @@ const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: Forw
   const { language } = useContext(LanguageContext)
 
   return (
-    <EventForm className={styles.eventForm} mode={mode} onSubmit={createEvent} ref={ref}>
+    <EventForm className={styles.eventForm} mode={mode} onSubmit={createEvent}>
       <label className={styles.simpleInput}>
         {language.pages.agenda.events.form.name}
         <input type='text' placeholder={language.pages.agenda.events.form.name} required value={data.name}
@@ -206,6 +206,6 @@ const ReminderEventForm = forwardRef((props: { mode: 'ADD' | 'EDIT' }, ref: Forw
       <hr/>
     </EventForm>
   )
-})
+}
 
 export default ReminderEventForm

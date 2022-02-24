@@ -6,7 +6,6 @@ import DatabaseManager from '$data/database/DatabaseManager'
 import StorageRequest from '$data/StorageRequest'
 
 import ReminderEvent from './ReminderEventForm'
-import { useOnClickOutside } from 'usehooks-ts'
 import { LanguageContext } from '$app/provider/LanguageProvider'
 
 const getFullDayRange = (timestamp: number) => {
@@ -69,8 +68,6 @@ const Events = (props: { date: number }) => {
   }, [database, date])
 
   const [showForm, setShowForm] = useState(false)
-  const formRef = useRef<HTMLFormElement>(null)
-  useOnClickOutside(formRef, () => setShowForm(false))
 
   return (
     <section className={styles.eventsContainer}>
@@ -85,7 +82,7 @@ const Events = (props: { date: number }) => {
       </ul>
       <section style={{ display: showForm ? '' : 'none' }} className={styles.formContainer}>
         <button onClick={() => setShowForm(false)} aria-label={language.pages.agenda.events.form.aria_closeButton}>X</button>
-        <ReminderEvent ref={formRef} mode={'ADD'}/>
+        <ReminderEvent mode={'ADD'}/>
       </section>
     </section>
   )
