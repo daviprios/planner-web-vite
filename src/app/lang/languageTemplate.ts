@@ -17,7 +17,11 @@ interface LanguageTemplate {
         aria_nextMonth: string
       }
       events: {
-
+        title: string,
+        addEvent: string,
+        form: {
+          aria_closeButton: string,
+        }
       }
     }
   }

@@ -19,7 +19,11 @@ const pt_br: LanguageTemplate = {
         aria_prevMonth: 'ir para o mês passado'
       },
       events: {
-
+        addEvent: 'Adicionar Evento',
+        title: 'Eventos',
+        form: {
+          aria_closeButton: 'fechar menu de adição de evento'
+        }
       }
     }
   }

@@ -7,11 +7,11 @@ import StorageRequest from '$data/StorageRequest'
 
 import ReminderEvent from './ReminderEventForm'
 import { useOnClickOutside } from 'usehooks-ts'
+import { LanguageContext } from '$app/provider/LanguageProvider'
 
 const getFullDayRange = (timestamp: number) => {
   const date = new Date(timestamp)
-  const [day, month, year, timezone] = [date.getDate(), date.getMonth(), date.getFullYear(), date.getTimezoneOffset()]
-  console.log(timezone)
+  const [day, month, year] = [date.getDate(), date.getMonth(), date.getFullYear()]
   
   const dateRange = new Date(year, month, day)
   const range: [number, number] = [dateRange.getTime(), 0]
@@ -24,6 +24,7 @@ const getFullDayRange = (timestamp: number) => {
 const Events = (props: { date: number }) => {
   const { date } = props
   const { database, reconnect } = useContext(DatabaseContext)
+  const { language } = useContext(LanguageContext)
 
   const [events, setEvents] = useState<JSX.Element[]>([])
   useEffect(() => {
@@ -35,8 +36,8 @@ const Events = (props: { date: number }) => {
     const result = database && await StorageRequest.read<'ReminderEvents'>(database, 'ReminderEvents', { get: 'ALL', return: 'VALUE', index: {
       table: 'timeStart',
       search: IDBKeyRange.bound(dayRange[0], dayRange[1])
-    } })
-    if(!result) return [<li>Empty</li>]
+    }})
+    if(result === undefined || result.length <= 0) return [<li>Empty</li>]
     let list: JSX.Element[] = []
     list = result.map((item) => {
       const { key, value } = item
@@ -73,17 +74,17 @@ const Events = (props: { date: number }) => {
 
   return (
     <section className={styles.eventsContainer}>
-      <h2 className={styles.title}>Events</h2>
+      <h2 className={styles.title}>{language.pages.agenda.events.title}</h2>
       <div className={styles.buttonContainer}>
-        <button onClick={() => DatabaseManager.deleteDatabase('database')}>delete DATABASE</button>
-        <button onClick={() => setShowForm(!showForm)}>Add Event</button>
-        <button onClick={() => getEvents().then(res => setEvents(res))}>Update</button>
+        <button onClick={() => DatabaseManager.deleteDatabase('database')}>TEMP - delete DATABASE</button>
+        <button onClick={() => setShowForm(!showForm)}>{language.pages.agenda.events.addEvent}</button>
+        <button onClick={() => getEvents().then(res => setEvents(res))}>TEMP - Update</button>
       </div>
       <ul className={styles.eventList}>
         {events}
       </ul>
       <section style={{ display: showForm ? '' : 'none' }} className={styles.formContainer}>
-        <button onClick={() => setShowForm(false)}>X</button>
+        <button onClick={() => setShowForm(false)} aria-label={language.pages.agenda.events.form.aria_closeButton}>X</button>
         <ReminderEvent ref={formRef} mode={'ADD'}/>
       </section>
     </section>

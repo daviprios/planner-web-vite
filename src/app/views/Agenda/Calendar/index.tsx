@@ -1,10 +1,11 @@
 import { Reducer, useContext, useEffect, useReducer } from 'react'
 import styles from './index.module.sass'
+
 import CalendarLogic from '$logic/CalendarLogic'
+import { LanguageContext } from '$app/provider/LanguageProvider'
 
 import ArrowLeft from '$svg/arrowLeft.svg?component'
 import ArrowRight from '$svg/arrowRight.svg?component'
-import { LanguageContext } from '$app/provider/LanguageProvider'
 
 interface ReducerState {
   date: number,
